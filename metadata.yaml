@@ -13,7 +13,7 @@
 # limitations under the License.
 
 homepage: "https://tealium.com"
-documentation: "https://docs.tealium.com/platforms/gtm/"
+documentation: "https://docs.tealium.com/platforms/"
 versions:
-  - sha: https://developers.google.com/tag-manager/templates/gallery#metadatayaml
+  - sha: fc5796afb40ec5b06e58640c1b489a23db9c694f
     changeNotes: Initial Version
