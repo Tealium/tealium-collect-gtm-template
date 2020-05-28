@@ -15,5 +15,5 @@
 homepage: "https://tealium.com"
 documentation: "https://docs.tealium.com/platforms/"
 versions:
-  - sha: fc5796afb40ec5b06e58640c1b489a23db9c694f
+  - sha: 94194373874a0d516c8ccb99c7dd4e10b5689fd3
     changeNotes: Initial Version
