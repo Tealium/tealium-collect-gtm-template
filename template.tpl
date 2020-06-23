@@ -56,7 +56,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "TEXT",
     "name": "tealiumDataSourceKey",
     "displayName": "Tealium Data Source Key",
-    "help": "(Optional) Enter the key for this data source from your server-side Tealium configurationa. <a href=\"https://community.tealiumiq.com/t5/Customer-Data-Hub/Data-Sources/ta-p/17933\">Learn More</a>",
+    "help": "(Optional) Enter the key for this data source from your server-side Tealium configuration. <a href=\"https://community.tealiumiq.com/t5/Customer-Data-Hub/Data-Sources/ta-p/17933\">Learn More</a>",
     "valueHint": "(Optional) abc123",
     "canBeEmptyString": true,
     "simpleValueType": true
@@ -64,7 +64,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "LABEL",
     "name": "label1",
-    "displayName": "Advanced Settings"
+    "displayName": "Additional Settings"
   },
   {
     "type": "TEXT",
@@ -533,6 +533,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 6/19/2020, 1:00:01 PM
+Created on 6/23/2020, 1:00:02 PM
 
 
