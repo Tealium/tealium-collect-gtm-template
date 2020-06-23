@@ -15,6 +15,8 @@
 homepage: "https://tealium.com"
 documentation: "https://docs.tealium.com/platforms/"
 versions:
+  - sha: b9b1c546f64e3fabd252ed71625ec867b7a7051c
+    changeNotes: Fixed typo
   - sha: b8718841344602099df6e54583288008ef70b887
     changeNotes: Added support for event name override
   - sha: 94194373874a0d516c8ccb99c7dd4e10b5689fd3
