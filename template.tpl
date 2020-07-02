@@ -125,12 +125,32 @@ log('data =', data);
 const url = 'https://tags.tiqcdn.com/libs/tealiumjs/latest/tealium_collect.min.js';
 var teal, dataLayer, eventData, eventName;
 
+// Get attributes from previous dataLayer.push calls (before the current one with the 'event' set)
+function mergePreviousData(dataLayer) {
+  var mergedData = dataLayer[dataLayer.length-1];
+  
+  // Very simple 'merge' that will not overwrite latest
+  for (let d = dataLayer.length-2; d >= 0; d--) {
+    let current = dataLayer[d];
+    if (current.event === undefined) {
+      for (let i in current){
+        if (mergedData[i] === undefined) {
+          mergedData[i] = current[i];
+        }
+      }
+    } else {
+      break; 
+    }
+  }
+  return mergedData;
+}
+
 // If a custom data object is configured (using Custom JavaScript Variable), use that for data layer
 if (typeof data.dataObject === "object") {
   eventData = data.dataObject;
 } else {
   dataLayer = copyFromWindow("dataLayer");
-  eventData = dataLayer[dataLayer.length-1];
+  eventData = mergePreviousData(dataLayer);
 }
 
 log('eventData = ', eventData);
@@ -524,7 +544,7 @@ scenarios:
     runCode(mockData);
 setup: |-
   var mockData = {
-    tealiumAccount: "integrations",
+    tealiumAccount: "XXXXXXXX",
     tealiumProfile: "main",
     tealiumDatasource: "test123",
     tealiumDebug: true
@@ -533,6 +553,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 6/23/2020, 1:00:02 PM
+Created on 7/2/2020, 1:00:03 PM
 
 
