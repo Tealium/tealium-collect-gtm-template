@@ -108,6 +108,14 @@ ___TEMPLATE_PARAMETERS___
     "help": "(Optional) Choose a custom JavaScript Variable to use as the data object. The default is dataLayer.",
     "valueHint": "(Optional)",
     "simpleValueType": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "mergeAllPreviousEventData",
+    "checkboxText": "Merge Data from All Previous Events",
+    "simpleValueType": true,
+    "help": "Automatically merge in all events/data from previous dataLayer.push calls on the same page.",
+    "defaultValue": true 
   }
 ]
 
@@ -132,7 +140,7 @@ function mergePreviousData(dataLayer) {
   // Very simple 'merge' that will not overwrite latest
   for (let d = dataLayer.length-2; d >= 0; d--) {
     let current = dataLayer[d];
-    if (current.event === undefined) {
+    if (current.event === undefined || data.mergeAllPreviousEventData) {
       for (let i in current){
         if (mergedData[i] === undefined) {
           mergedData[i] = current[i];
@@ -553,6 +561,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 7/2/2020, 1:00:03 PM
+Created on 7/2/2020, 1:00:04 PM
 
 
