@@ -13,8 +13,10 @@
 # limitations under the License.
 
 homepage: "https://tealium.com"
-documentation: "https://docs.tealium.com/platforms/"
+documentation: "https://docs.tealium.com/platforms/google-tag-manager/"
 versions:
+  - sha: d391fe2804786430f56f85ae25e941de154e9f83
+    changeNotes: Add checkbox to merge in all previous events in dataLayer.push array
   - sha: 90e5682c7edd878653890e6ff4611c03fd3aaff5
     changeNotes: Fix to merge in previous dataLayer.push objects
   - sha: b9b1c546f64e3fabd252ed71625ec867b7a7051c
