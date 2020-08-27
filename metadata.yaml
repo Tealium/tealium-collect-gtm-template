@@ -15,6 +15,8 @@
 homepage: "https://tealium.com"
 documentation: "https://docs.tealium.com/platforms/google-tag-manager/"
 versions:
+  - sha: dfb52287bd33f16987a4100e0d5d4a394e8e068c
+    changeNotes: Adding mapping support for additional key/value pairs
   - sha: d391fe2804786430f56f85ae25e941de154e9f83
     changeNotes: Add checkbox to merge in all previous events in dataLayer.push array
   - sha: 90e5682c7edd878653890e6ff4611c03fd3aaff5
