@@ -56,7 +56,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "TEXT",
     "name": "tealiumDataSourceKey",
     "displayName": "Tealium Data Source Key",
-    "help": "(Optional) Enter the key for this data source from your server-side Tealium configuration. <a href=\"https://community.tealiumiq.com/t5/Customer-Data-Hub/Data-Sources/ta-p/17933\">Learn More</a>",
+    "help": "(Optional) Enter the key for this data source from your server-side Tealium configuration. \u003ca href\u003d\"https://community.tealiumiq.com/t5/Customer-Data-Hub/Data-Sources/ta-p/17933\"\u003eLearn More\u003c/a\u003e",
     "valueHint": "(Optional) abc123",
     "canBeEmptyString": true,
     "simpleValueType": true
@@ -84,21 +84,24 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "type": "TEXT",
-    "name": "tealiumEvent",
-    "displayName": "Tealium Event",
-    "simpleValueType": true,
-    "help": "(Optional) Choose the Variable used to set tealium_event. By default, tealium_event is set to the \"event\" property of the dataLayer object.",
-    "valueHint": "(Optional)",
-    "canBeEmptyString": true,
-    "valueValidators": [
+    "type": "SIMPLE_TABLE",
+    "name": "customAttributes",
+    "displayName": "Custom Data Attributes or Attribute Override",
+    "simpleTableColumns": [
       {
-        "type": "REGEX",
-        "args": [
-          "\\{\\{.*\\}\\}|^$"
-        ]
+        "defaultValue": "",
+        "displayName": "Attribute Name",
+        "name": "name",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Attribute Value",
+        "name": "value",
+        "type": "TEXT"
       }
-    ]
+    ],
+    "help": "Add new attributes to each event or override existing attribute."
   },
   {
     "type": "TEXT",
@@ -115,7 +118,7 @@ ___TEMPLATE_PARAMETERS___
     "checkboxText": "Merge Data from All Previous Events",
     "simpleValueType": true,
     "help": "Automatically merge in all events/data from previous dataLayer.push calls on the same page.",
-    "defaultValue": true 
+    "defaultValue": true
   }
 ]
 
@@ -131,7 +134,7 @@ const copyFromWindow = require('copyFromWindow');
 log('data =', data);
 
 const url = 'https://tags.tiqcdn.com/libs/tealiumjs/latest/tealium_collect.min.js';
-var teal, dataLayer, eventData, eventName;
+var teal, dataLayer, eventData, eventName, attrs;
 
 // Get attributes from previous dataLayer.push calls (before the current one with the 'event' set)
 function mergePreviousData(dataLayer) {
@@ -161,9 +164,15 @@ if (typeof data.dataObject === "object") {
   eventData = mergePreviousData(dataLayer);
 }
 
+// Adds the name/value pairs for mapping overrides or adding new event attributes
+attrs = data.customAttributes || [];
+for (var i = 0; i < attrs.length; i += 1) {
+  eventData[attrs[i].name] = attrs[i].value;
+}
+
 log('eventData = ', eventData);
 
-eventName = data.tealiumEvent || eventData.tealium_event || eventData.event;
+eventName = eventData.tealium_event || eventData.event;
 
 log('eventName = ', eventName);
 
@@ -180,6 +189,7 @@ const onSuccess = () => {
   teal = callInWindow("Tealium", config);
   setInWindow("tealium.track", teal.track, true);
   setInWindow("tealium.util", teal.util, true);
+  setInWindow("tealium.getVisitorId", teal.getVisitorId, true);
   
   teal.track(eventName, teal.util.flatten(eventData,5,true));
   
@@ -507,6 +517,45 @@ ___WEB_PERMISSIONS___
                     "boolean": true
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "tealium.getVisitorId"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -561,6 +610,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 7/2/2020, 1:00:04 PM
+Created on 7/2/2020, 1:00:05 PM
 
 
