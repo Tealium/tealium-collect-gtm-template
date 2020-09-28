@@ -13,7 +13,7 @@ ___INFO___
   "id": "cvt_temp_public_id",
   "version": 1,
   "securityGroups": [],
-  "displayName": "Tealium Collect Tag (Beta)",
+  "displayName": "Tealium Collect Tag",
   "brand": {
     "id": "tealium",
     "displayName": "Tealium",
