@@ -15,7 +15,7 @@
 homepage: "https://tealium.com"
 documentation: "https://docs.tealium.com/platforms/google-tag-manager/"
 versions:
-  - sha: 4f90e70687cf0203aed277ed11db90cd064bca9e
+  - sha: d8fbb6b39ff1c11327f3d47e33bf69ef42afdd64
     changeNotes: Removing Beta label
   - sha: dfb52287bd33f16987a4100e0d5d4a394e8e068c
     changeNotes: Adding mapping support for additional key/value pairs
