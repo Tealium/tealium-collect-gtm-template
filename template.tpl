@@ -178,13 +178,20 @@ log('eventName = ', eventName);
 
 const onSuccess = () => {
   var config = [],
+      endpoint = data.tealiumEndpoint,
       queue = copyFromWindow("tealium.q") || [];
   
   config.push(["config", "init", [data.tealiumAccount, data.tealiumProfile, "prod", data.tealiumDataSourceKey]]);
   if (data.tealiumDebug || eventData.tealium_debug) {
     config.push(["config", "debug", true]);
   }
-  config.push(["config", "addTag", {name: "tealium_collect", version: "1.0.3", server: data.tealiumEndpoint}]);
+
+  // Bug fix workaround for custom 3rd-party endpoint (example-collect.tealiumiq.com)
+  if (endpoint && endpoint.indexOf("collect.tealiumiq.com") > 8) {
+    endpoint = endpoint.replace("https://","");
+  }
+
+  config.push(["config", "addTag", {name: "tealium_collect", version: "1.0.3", server: endpoint}]);
   
   teal = callInWindow("Tealium", config);
   setInWindow("tealium.track", teal.track, true);
@@ -587,13 +594,20 @@ scenarios:
     // Call runCode to run the template's code.
     runCode(mockData);
 - name: Test 3
+  code: |
+    // mockData.tealiumEndpoint = "https://example-collect.tealiumiq.com/event";
+
+    mockData.dataObject = {"event": "test_event", "hello" : "world"};
+
+    // Call runCode to run the template's code.
+    runCode(mockData);
+- name: Test 4
   code: |+
     mockData.dataObject = {"event": "test_event2", "hello" : "world2"};
 
     // Call runCode to run the template's code.
     runCode(mockData);
-
-- name: Test 4
+- name: Test 5
   code: |-
     mockData.tealiumEvent = "event_override_test";
 
