@@ -47,7 +47,7 @@ Check this box to add all data attributes from previous dataLayer.push calls.  I
 
 ## Copyright and license
 
-Copyright 2020 Tealium Inc. All rights reserved.
+Copyright 2021 Tealium Inc. All rights reserved.
 
 Licensed under the **[Apache License, Version 2.0][license]** (the "License");
 you may not use this software except in compliance with the License.

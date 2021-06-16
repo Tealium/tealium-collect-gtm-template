@@ -122,7 +122,6 @@ ___TEMPLATE_PARAMETERS___
   }
 ]
 
-
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const log = require('logToConsole');
@@ -138,19 +137,31 @@ var teal, dataLayer, eventData, eventName, attrs;
 
 // Get attributes from previous dataLayer.push calls (before the current one with the 'event' set)
 function mergePreviousData(dataLayer) {
-  var mergedData = dataLayer[dataLayer.length-1];
+  var eventId = data.gtmEventId,
+    foundCurrent = false,
+    mergedData = {};
   
-  // Very simple 'merge' that will not overwrite latest
-  for (let d = dataLayer.length-2; d >= 0; d--) {
+  // Very simple 'merge' that ignores any events 'pushed' after the eventId that triggered this tag
+  for (let d = dataLayer.length-1; d >= 0; d--) {
     let current = dataLayer[d];
-    if (current.event === undefined || data.mergeAllPreviousEventData) {
-      for (let i in current){
-        if (mergedData[i] === undefined) {
-          mergedData[i] = current[i];
+    
+    if (current === undefined) continue;
+    
+    if (current['gtm.uniqueEventId'] === eventId) {
+      foundCurrent = true;
+      mergedData = current;
+    } else if (foundCurrent) {   
+      if (current.event === undefined || data.mergeAllPreviousEventData) {
+        for (let i in current){
+          if (mergedData[i] === undefined) {
+            mergedData[i] = current[i];
+          }
         }
+      } else {
+        break;
       }
     } else {
-      break; 
+      log('ignore =', current); 
     }
   }
   return mergedData;
@@ -227,7 +238,6 @@ if (teal === undefined){
   teal.track(eventName, teal.util.flatten(eventData,5,true));
   data.gtmOnSuccess();
 }
-
 
 ___WEB_PERMISSIONS___
 
@@ -609,9 +619,16 @@ scenarios:
     runCode(mockData);
 - name: Test 5
   code: |-
-    mockData.tealiumEvent = "event_override_test";
+    var copyFromWindow = require('copyFromWindow');
+    var log = require('logToConsole');
+    var myDataLayer = copyFromWindow('dataLayer');
 
-    // Call runCode to run the template's code.
+    log(myDataLayer);
+    // Tracking gtm.js eventId "3" (which may change in the future?)
+    mockData.gtmEventId = 3;
+    // {"gtm.start":1623772821567,"event":"gtm.js","gtm.uniqueEventId":3}
+    // tealium_event = "gtm.js"
+
     runCode(mockData);
 setup: |-
   var mockData = {
@@ -624,6 +641,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 7/2/2020, 1:00:05 PM
+Created on 6/17/2021, 1:00:08 PM
 
 
