@@ -71,8 +71,8 @@ ___TEMPLATE_PARAMETERS___
     "name": "tealiumEndpoint",
     "displayName": "Data Collection Endpoint",
     "simpleValueType": true,
-    "help": "(Optional) Override the default Tealium Collect endpoint with your own custom first-party data collection endpoint, such as: https://collect.example.co.uk/event",
-    "valueHint": "(Optional) https://collect.example.co.uk/event",
+    "help": "(Optional) Override the default Tealium Collect endpoint with your own custom first-party data collection endpoint, such as: https://collect.example.co.uk/my-event-endpoint",
+    "valueHint": "(Optional) https://collect.example.co.uk/my-event-endpoint",
     "canBeEmptyString": true,
     "valueValidators": [
       {
