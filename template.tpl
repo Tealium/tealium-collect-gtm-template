@@ -140,17 +140,17 @@ function mergePreviousData(dataLayer) {
   var eventId = data.gtmEventId,
     foundCurrent = false,
     mergedData = {};
-  
+
   // Very simple 'merge' that ignores any events 'pushed' after the eventId that triggered this tag
   for (let d = dataLayer.length-1; d >= 0; d--) {
     let current = dataLayer[d];
-    
+
     if (current === undefined) continue;
-    
+
     if (current['gtm.uniqueEventId'] === eventId) {
       foundCurrent = true;
       mergedData = current;
-    } else if (foundCurrent) {   
+    } else if (foundCurrent) {
       if (current.event === undefined || data.mergeAllPreviousEventData) {
         for (let i in current){
           if (mergedData[i] === undefined) {
@@ -161,7 +161,7 @@ function mergePreviousData(dataLayer) {
         break;
       }
     } else {
-      log('ignore =', current); 
+      log('ignore =', current);
     }
   }
   return mergedData;
@@ -169,11 +169,11 @@ function mergePreviousData(dataLayer) {
 
 // If a custom data object is configured (using Custom JavaScript Variable), use that for data layer
 if (typeof data.dataObject === "object") {
-  eventData = data.dataObject;
+  dataLayer = data.dataObject;
 } else {
   dataLayer = copyFromWindow("dataLayer");
-  eventData = mergePreviousData(dataLayer);
 }
+eventData = mergePreviousData(dataLayer);
 
 // Adds the name/value pairs for mapping overrides or adding new event attributes
 attrs = data.customAttributes || [];
@@ -191,7 +191,7 @@ const onSuccess = () => {
   var config = [],
       endpoint = data.tealiumEndpoint,
       queue = copyFromWindow("tealium.q") || [];
-  
+
   config.push(["config", "init", [data.tealiumAccount, data.tealiumProfile, "prod", data.tealiumDataSourceKey]]);
   if (data.tealiumDebug || eventData.tealium_debug) {
     config.push(["config", "debug", true]);
@@ -203,14 +203,14 @@ const onSuccess = () => {
   }
 
   config.push(["config", "addTag", {name: "tealium_collect", version: "1.0.3", server: endpoint}]);
-  
+
   teal = callInWindow("Tealium", config);
   setInWindow("tealium.track", teal.track, true);
   setInWindow("tealium.util", teal.util, true);
   setInWindow("tealium.getVisitorId", teal.getVisitorId, true);
-  
+
   teal.track(eventName, teal.util.flatten(eventData,5,true));
-  
+
   // Process through the events that were queued up while the JS was loading
   for (var i = 0; i < queue.length; i += 1) {
     teal.track(queue[i].event, teal.util.flatten(queue[i].eventData ,5, true));
