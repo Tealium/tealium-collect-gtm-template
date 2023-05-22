@@ -106,9 +106,18 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "TEXT",
     "name": "dataObject",
-    "displayName": "Data Object",
+    "displayName": "Renamed dataLayer",
     "canBeEmptyString": false,
-    "help": "(Optional) Choose a custom JavaScript Variable to use as the data object. The default is dataLayer.",
+    "help": "(Optional) If you are using a data layer other than dataLayer, choose the object here.",
+    "valueHint": "(Optional)",
+    "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
+    "name": "customEventDataObject",
+    "displayName": "Custom Event Data Object",
+    "canBeEmptyString": false,
+    "help": "(Optional) Choose a custom JavaScript Variable to use as the event data object. This will be used instead of dataLayer.",
     "valueHint": "(Optional)",
     "simpleValueType": true
   },
@@ -167,13 +176,18 @@ function mergePreviousData(dataLayer) {
   return mergedData;
 }
 
-// If a custom data object is configured (using Custom JavaScript Variable), use that for data layer
-if (typeof data.dataObject === "object") {
-  dataLayer = data.dataObject;
+// If a custom data object is configured (using Custom JavaScript Variable), use that for event data
+// Then, use either renamed data layer or dataLayer
+if (typeof data.customEventDataObject === "object") {
+  eventData = data.customEventDataObject;
 } else {
-  dataLayer = copyFromWindow("dataLayer");
+  if (typeof data.dataObject === "object") {
+    dataLayer = data.dataObject;
+  } else {
+    dataLayer = copyFromWindow("dataLayer");
+  }
+  eventData = mergePreviousData(dataLayer);
 }
-eventData = mergePreviousData(dataLayer);
 
 // Adds the name/value pairs for mapping overrides or adding new event attributes
 attrs = data.customAttributes || [];
