@@ -216,7 +216,7 @@ const onSuccess = () => {
     endpoint = endpoint.replace("https://","");
   }
 
-  config.push(["config", "addTag", {name: "tealium_collect", version: "1.0.3", server: endpoint}]);
+  config.push(["config", "addTag", {name: "tealium_collect", server: endpoint}]);
 
   teal = callInWindow("Tealium", config);
   setInWindow("tealium.track", teal.track, true);
